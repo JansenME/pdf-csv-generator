@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.File;
@@ -28,9 +29,9 @@ public class Controller {
         this.pdfService = pdfService;
     }
 
-    @GetMapping(value = "/getcsv", produces = "application/csv")
-    public HttpEntity<byte[]> getCSV() throws IOException {
-        File file = csvService.createFile();
+    @GetMapping(value = "/getcsv/{amount}", produces = "application/csv")
+    public HttpEntity<byte[]> getCSV(@PathVariable String amount) throws IOException {
+        File file = csvService.createFile(Integer.valueOf(amount));
 
         byte[] document = FileCopyUtils.copyToByteArray(file);
 
@@ -41,9 +42,9 @@ public class Controller {
         return new HttpEntity<>(document, headers);
     }
 
-    @GetMapping(value = "/getpdf", produces = "application/pdf")
-    public HttpEntity<byte[]> getPDF() throws IOException, DocumentException {
-        File file = pdfService.createFile();
+    @GetMapping(value = "/getpdf/{amount}", produces = "application/pdf")
+    public HttpEntity<byte[]> getPDF(@PathVariable String amount) throws IOException, DocumentException {
+        File file = pdfService.createFile(Integer.valueOf(amount));
 
         byte[] document = FileCopyUtils.copyToByteArray(file);
 

@@ -12,7 +12,7 @@ import java.io.IOException;
 public class CSVService {
     private static final String FILE_NAME = "./output.csv";
 
-    public File createFile() {
+    public File createFile(int amount) {
         File file = new File(FILE_NAME);
 
         try {
@@ -20,7 +20,7 @@ public class CSVService {
 
             CSVWriter writer = new CSVWriter(outputFile);
 
-            writer.writeAll(Data.getData(100000));
+            writer.writeAll(Data.getData(amount));
 
             writer.close();
         } catch (IOException e) {

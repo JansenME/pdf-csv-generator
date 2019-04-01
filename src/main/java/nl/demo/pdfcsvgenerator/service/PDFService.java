@@ -10,16 +10,16 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
 public class PDFService {
     private static final String FILE_NAME = "./output.pdf";
 
-    private final Document document =  new Document();
-
-    public File createFile() throws FileNotFoundException, DocumentException {
+    public File createFile(int amount) throws FileNotFoundException, DocumentException {
         File file = new File(FILE_NAME);
+        final Document document =  new Document();
 
         PdfWriter.getInstance(document, new FileOutputStream(file));
 
@@ -27,7 +27,7 @@ public class PDFService {
 
         PdfPTable table = new PdfPTable(29);
 
-        List<String[]> data = Data.getData(20000);
+        List<String[]> data = Data.getData(amount);
 
         data.forEach(value -> addData(value, table));
 
@@ -39,34 +39,7 @@ public class PDFService {
     }
 
     private void addData(String[] value, PdfPTable table) {
-        table.addCell(value[0]);
-        table.addCell(value[1]);
-        table.addCell(value[2]);
-        table.addCell(value[3]);
-        table.addCell(value[4]);
-        table.addCell(value[5]);
-        table.addCell(value[6]);
-        table.addCell(value[7]);
-        table.addCell(value[8]);
-        table.addCell(value[9]);
-        table.addCell(value[10]);
-        table.addCell(value[11]);
-        table.addCell(value[12]);
-        table.addCell(value[13]);
-        table.addCell(value[14]);
-        table.addCell(value[15]);
-        table.addCell(value[16]);
-        table.addCell(value[17]);
-        table.addCell(value[18]);
-        table.addCell(value[19]);
-        table.addCell(value[20]);
-        table.addCell(value[21]);
-        table.addCell(value[22]);
-        table.addCell(value[23]);
-        table.addCell(value[24]);
-        table.addCell(value[25]);
-        table.addCell(value[26]);
-        table.addCell(value[27]);
-        table.addCell(value[28]);
+        Arrays.stream(value)
+                .forEach(table::addCell);
     }
 }
