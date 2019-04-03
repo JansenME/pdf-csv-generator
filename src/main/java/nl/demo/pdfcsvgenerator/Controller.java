@@ -20,6 +20,8 @@ import java.nio.file.Files;
 @Slf4j
 @RestController
 public class Controller {
+    private static final String FILENAME_CSV = "output.csv";
+
     private final CSVService csvService;
     private final PDFService pdfService;
 
@@ -30,14 +32,10 @@ public class Controller {
     }
 
     @GetMapping(value = "/getcsv/{amount}", produces = "application/csv")
-    public HttpEntity<byte[]> getCSV(@PathVariable String amount) throws IOException {
-        File file = csvService.createFile(Integer.valueOf(amount));
+    public HttpEntity<byte[]> getCSV(@PathVariable String amount) {
+        byte[] document = csvService.createByteArray(amount);
 
-        byte[] document = FileCopyUtils.copyToByteArray(file);
-
-        HttpHeaders headers = setHeaders(file, new MediaType("application", "csv"), document);
-
-        Files.deleteIfExists(file.toPath());
+        HttpHeaders headers = setHeaders(new MediaType("application", "csv"), document);
 
         return new HttpEntity<>(document, headers);
     }
@@ -53,6 +51,16 @@ public class Controller {
         Files.deleteIfExists(file.toPath());
 
         return new HttpEntity<>(document, headers);
+    }
+
+    private HttpHeaders setHeaders(final MediaType mediaType, final byte[] document) {
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.setContentType(mediaType);
+        headers.set("Content-Disposition", "attachment; filename=" + FILENAME_CSV);
+        headers.setContentLength(document.length);
+
+        return headers;
     }
 
     private HttpHeaders setHeaders(final File file, final MediaType mediaType, final byte[] document) {
