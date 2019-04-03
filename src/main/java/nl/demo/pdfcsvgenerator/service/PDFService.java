@@ -2,6 +2,7 @@ package nl.demo.pdfcsvgenerator.service;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.PageSize;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import nl.demo.pdfcsvgenerator.Data;
@@ -19,7 +20,7 @@ public class PDFService {
 
     public File createFile(int amount) throws FileNotFoundException, DocumentException {
         File file = new File(FILE_NAME);
-        final Document document =  new Document();
+        final Document document =  new Document(PageSize.A4.rotate());
 
         PdfWriter.getInstance(document, new FileOutputStream(file));
 
